@@ -62,9 +62,10 @@ def main():
     h = T.nnet.sigmoid(T.dot(X, theta))
 
     # コスト関数を定義する(sigmoid)
-    cost = (1.0 / m) * T.sum(
-        -y * T.log(h) - (1 - y) * T.log(1 - h)
-    )
+    # 正規化項を導入
+    lam = 1.0
+    cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h)) \
+        + lam / (2 * m) * T.sum(theta ** 2)
 
     # コスト関数の微分を定義
     g_cost = theano.grad(cost=cost, wrt=theta)
@@ -102,10 +103,21 @@ def main():
     # plotを表示
     plt.xlabel("train times")
     plt.ylabel("cost")
-    # plt.xlim((30, 100))
-    # plt.ylim((30, 100))
     plt.legend()
     plt.show()
+
+    # 実際の分布を表示する
+    # plt.figure(1)
+    # xmin, xmax = min(data_x[:,1]), max(data_x[:,1])
+    # xs = np.linspace(xmin, xmax, 100)
+    # ys = [- (t[0] / t[2]) - (t[1] / t[2]) * x for x in xs]
+    # plt.plot(xs, ys, 'b-', label="decision boundary")
+    # plt.xlabel("x1")
+    # plt.ylabel("x2")
+    # plt.xlim((30, 100))
+    # plt.ylim((30, 100))
+    # plt.legend()
+    # plt.show()
 
 
 if __name__ == "__main__":
