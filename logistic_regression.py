@@ -71,11 +71,16 @@ def main():
     h = T.nnet.sigmoid(T.dot(X, theta))
 
     # コスト関数を定義する(sigmoid)
+
+    # 交差エントロピー誤差関数
     # 正規化項を導入
     # lam = 1.0
     # cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h)) \
     #     + lam / (2 * m) * T.sum(theta ** 2)
-    cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h))
+    # cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h))
+
+    # 誤差関数
+    cost = T.mean((y - h) ** 2)
 
     # コスト関数の微分を定義
     g_cost = theano.grad(cost=cost, wrt=theta)
