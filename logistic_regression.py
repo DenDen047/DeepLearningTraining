@@ -7,6 +7,15 @@ import theano
 import theano.tensor as T
 import matplotlib.pyplot as plt
 
+# 正規化項を含まない場合
+#     interations = 300000
+#     final cost = 0.2837
+# 正規化項を含む場合
+#     interations = 300000
+#     learning_rate = 0.001
+#         = 0.1 だと振動
+#     final cost = 0.29642
+
 
 def plot_data(X, y):
     """ グラフ表示関数 """
@@ -33,8 +42,8 @@ def main():
     data_y = data[:, 2]
 
     # 訓練データをプロット
-    # plt.figure(1)
-    # plot_data(data_x, data_y)
+    plt.figure(1)
+    plot_data(data_x, data_y)
 
     # データの個数を取得
     m = len(data_x)
@@ -63,9 +72,10 @@ def main():
 
     # コスト関数を定義する(sigmoid)
     # 正規化項を導入
-    lam = 1.0
-    cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h)) \
-        + lam / (2 * m) * T.sum(theta ** 2)
+    # lam = 1.0
+    # cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h)) \
+    #     + lam / (2 * m) * T.sum(theta ** 2)
+    cost = (1.0 / m) * T.sum(-y * T.log(h) - (1 - y) * T.log(1 - h))
 
     # コスト関数の微分を定義
     g_cost = theano.grad(cost=cost, wrt=theta)
@@ -93,31 +103,19 @@ def main():
     # thetaの値を更新
     t = theta.get_value()
 
-    # 決定境界を表示
+    # 実際の分布を表示する
     plt.figure(1)
-    xmin, xmax = min(cost_graph), max(cost_graph)
-    xs = np.linspace(xmin, xmax, len(cost_graph))
-    ys = [y * 100 for y in cost_graph]
-    plt.plot(xs, ys, 'b-', label="cost graph")
+    xmin, xmax = min(data_x[:, 1]), max(data_x[:, 1])
+    xs = np.linspace(xmin, xmax, 100)
+    ys = [- (t[0] / t[2]) - (t[1] / t[2]) * x for x in xs]
+    plt.plot(xs, ys, 'b-', label="decision boundary")
 
-    # plotを表示
-    plt.xlabel("train times")
-    plt.ylabel("cost")
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    plt.xlim((30, 100))
+    plt.ylim((30, 100))
     plt.legend()
     plt.show()
-
-    # 実際の分布を表示する
-    # plt.figure(1)
-    # xmin, xmax = min(data_x[:,1]), max(data_x[:,1])
-    # xs = np.linspace(xmin, xmax, 100)
-    # ys = [- (t[0] / t[2]) - (t[1] / t[2]) * x for x in xs]
-    # plt.plot(xs, ys, 'b-', label="decision boundary")
-    # plt.xlabel("x1")
-    # plt.ylabel("x2")
-    # plt.xlim((30, 100))
-    # plt.ylim((30, 100))
-    # plt.legend()
-    # plt.show()
 
 
 if __name__ == "__main__":
