@@ -1,7 +1,4 @@
 #coding: utf-8
-import os
-import sys
-import time
 import numpy as np
 import theano
 import theano.tensor as T
