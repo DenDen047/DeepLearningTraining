@@ -54,11 +54,9 @@ def main():
     # 訓練データを共有変数にする
     X = theano.shared(
         np.asarray(data_x, dtype=theano.config.floatX),
-        name='X',
         borrow=True)
     y = theano.shared(
         np.asarray(data_y, dtype=theano.config.floatX),
-        name='y',
         borrow=True)
 
     # パラメータを共有変数とする
