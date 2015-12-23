@@ -4,8 +4,9 @@ import pickle
 
 
 print 'convert: train.csv -> train.pkl'
+
 pyln_data = CSVDataset(
     "./train.csv",
-    one_hot=True,
+    expect_headers=True,
     delimiter=',')
-pickle.dump(pyln_data, open("data/train.pkl", 'w'))
+pickle.dump(pyln_data, open("./train.pkl", 'w'))
